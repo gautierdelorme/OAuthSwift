@@ -55,5 +55,18 @@ public class OAuthSwiftCredential: NSObject, NSCoding {
         coder.encodeObject(self.oauth_token_secret, forKey: CodingKeys.oauthTokenSecret)
         coder.encodeObject(self.oauth_verifier, forKey: CodingKeys.oauthVerifier)
     }
+    
+    public func save() {
+        let data = NSKeyedArchiver.archivedDataWithRootObject(self)
+        NSUserDefaults.standardUserDefaults().setObject(data, forKey: "OAuthSwiftCredential")
+    }
+    
+    public class func loadSaved() -> OAuthSwiftCredential? {
+        if let data = NSUserDefaults.standardUserDefaults().objectForKey("OAuthSwiftCredential") as? NSData {
+            return NSKeyedUnarchiver.unarchiveObjectWithData(data) as? OAuthSwiftCredential
+        }
+        return nil
+    }
+    
     // } // End NSCoding extension
 }
